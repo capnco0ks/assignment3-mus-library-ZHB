@@ -4,8 +4,8 @@ public class Song extends Media {
 
     private String genre;
 
-    public Song(int id, String name, int duration, Author author, String genre){
-        super(id,name,duration,author);
+    public Song(int id, String name, int duration, Author author, String genre, Category category){
+        super(id,name,duration,author,category);
         this.genre = genre;
     }
 

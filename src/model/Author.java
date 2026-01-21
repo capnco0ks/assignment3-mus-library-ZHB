@@ -23,6 +23,7 @@ public class Author {
         if (name==null|| name.isBlank()){
             throw new IllegalArgumentException("Author name cannot be empty");
         }
+        this.name = name;
     }
 
 }
