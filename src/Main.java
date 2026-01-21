@@ -1,4 +1,8 @@
 import model.*;
+import repository.AuthorRepository;
+import utils.DataBaseConnection;
+
+import java.sql.Connection;
 
 public class Main {
     public static void main(String[] args){
@@ -12,11 +16,22 @@ public class Main {
                 2,"VPISKA Morgen",3600, author,1,interview
         );
 
-        //polymorphism
-        song.play();
-        Podcast.play();
+        try (Connection conn = DataBaseConnection.getConnection()){
+            System.out.println("succesfully");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
-        song.displayInfo();
-        Podcast.displayInfo();
+        Author author1 = new Author(1,"MORGENSHTERN");
+        AuthorRepository repo = new AuthorRepository();
+        repo.create(author1);
+
+        //polymorphism
+        //song.play();
+        //Podcast.play();
+//
+        //song.displayInfo();
+        //Podcast.displayInfo();
     }
 }
