@@ -12,6 +12,7 @@ import java.util.List;
 
 public class AuthorRepository {
     public void create(Author author){
+
         String sql = "INSERT INTO authors(id, name) VALUES (?, ?)";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){

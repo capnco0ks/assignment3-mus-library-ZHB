@@ -30,15 +30,18 @@ public class Main {
         //repo.create(author1);
 
         //
-        // AuthorRepository authorRepo = new AuthorRepository();
-        // Author author2 = new Author(2,"Lil Wayne");
-        // authorRepo.create(author2);
-        // AuthorRepository repo = new AuthorRepository();
+         AuthorRepository authorRepo = new AuthorRepository();
+         Author author2 = new Author(2,"Lil Wayne");
+         authorRepo.create(author2);
+         AuthorRepository repo = new AuthorRepository();
 
         // authorService.getAll().forEach(a ->
         //         System.out.println(a.getId()+" "+a.getName())
         // );
 
+
+        //UPDATE
+        authorService.update(2,"Lil Wayne (updated)");
 
         //DELETIN
         // authorService.delete(2);
