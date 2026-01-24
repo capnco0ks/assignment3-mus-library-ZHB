@@ -1,5 +1,7 @@
 package repository;
 
+import exception.AuthorNotFoundException;
+import exception.DataBaseException;
 import model.Author;
 import utils.DataBaseConnection;
 
@@ -21,7 +23,7 @@ public class AuthorRepository {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to insert author :( ",e);
+            throw new DataBaseException("Failed to insert author :( ",e);
         }
     }
 
@@ -37,7 +39,7 @@ public class AuthorRepository {
                 }
             }
         catch (SQLException e){
-                throw new RuntimeException("Failed to fetch authors");
+                throw new DataBaseException("Failed to fetch authors", e);
         }
         return authors;
     }
@@ -56,9 +58,9 @@ public class AuthorRepository {
                         rs.getString("name")
                 );
             }
-            throw new RuntimeException("Author not found");
+            throw new AuthorNotFoundException(id);
         } catch (Exception e) {
-            throw new RuntimeException("failed to connect",e);
+            throw new DataBaseException("failed to connect",e);
         }
     }
 
@@ -73,11 +75,11 @@ public class AuthorRepository {
             int updated = ps.executeUpdate();
 
             if (updated == 0){
-                throw new RuntimeException("Author not found");
+                throw new AuthorNotFoundException(id);
             }
         }
         catch (SQLException e ){
-            throw new RuntimeException("failed to update", e);
+            throw new DataBaseException("failed to update", e);
         }
 
     }
@@ -90,11 +92,11 @@ public class AuthorRepository {
 
             int deleted = ps.executeUpdate();
             if(deleted == 0){
-                throw new RuntimeException("Author not found");
+                throw new AuthorNotFoundException(id);
             }
         }
         catch(SQLException e){
-            throw new RuntimeException("failed to delete", e);
+            throw new DataBaseException("failed to delete", e);
         }
 
     }
