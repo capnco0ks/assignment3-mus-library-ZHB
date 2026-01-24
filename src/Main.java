@@ -70,9 +70,6 @@ public class Main {
         //Author author1 = new Author(1,"MORGENSHTERN");
         //repo.create(author1);
 
-
-
-        //
          // AuthorRepository authorRepo = new AuthorRepository();
          // Author author2 = new Author(2,"Lil Wayne");
          // authorRepo.create(author2);
@@ -82,7 +79,6 @@ public class Main {
         // authorService.getAll().forEach(a ->
         //         System.out.println(a.getId()+" "+a.getName())
         // );
-
 
         //UPDATE
         // authorService.update(2,"Lil Wayne (updated)");
@@ -94,7 +90,7 @@ public class Main {
         //POLYMORPH
         //song.play();
         //Podcast.play();
-//
+
         //song.displayInfo();
         //Podcast.displayInfo();
     }
