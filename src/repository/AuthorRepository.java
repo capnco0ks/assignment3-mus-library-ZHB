@@ -33,12 +33,9 @@ public class AuthorRepository implements CrudRepository<Author> {
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                authors.add(new Author(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("rating")
-                ));
+                authors.add(new Author(rs.getInt("id"), rs.getString("name"), rs.getInt("rating")));
             }
         } catch (SQLException e) {
             throw new DataBaseException("Failed to fetch authors", e);
@@ -53,16 +50,13 @@ public class AuthorRepository implements CrudRepository<Author> {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
-                return new Author(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("rating")
-                );
+                return new Author(rs.getInt("id"), rs.getString("name"), rs.getInt("rating"));
             }
             throw new AuthorNotFoundException(id);
         } catch (SQLException e) {
-            throw new DataBaseException("Failed to get author", e);
+            throw new DataBaseException("Failed to get author by ID", e);
         }
     }
 
@@ -74,6 +68,7 @@ public class AuthorRepository implements CrudRepository<Author> {
             ps.setString(1, author.getName());
             ps.setInt(2, author.getRating());
             ps.setInt(3, id);
+
             int updated = ps.executeUpdate();
             if (updated == 0) throw new AuthorNotFoundException(id);
         } catch (SQLException e) {
