@@ -16,6 +16,9 @@ public class AuthorService {
         if (author.getName() == null || author.getName().isBlank()){
             throw new IllegalArgumentException("Author cannot be empty");
         }
+        if (author.getRating() < 0 || author.getRating() > 10) {
+            throw new IllegalArgumentException("Invalid rating");
+        }
         try {
             authorRepository.getById(author.getId());
             throw new IllegalArgumentException("author with this ID already exists");
@@ -37,11 +40,11 @@ public class AuthorService {
         return authorRepository.getById(id);
     }
 
-    public void update (int id, String newName){
+    public void update (int id, String newName,int newRating){
         if (newName == null || newName.isBlank()){
             throw new IllegalArgumentException("Author cannot be empty");
         }
-        Author updatedAuthor = new Author(id,newName);
+        Author updatedAuthor = new Author(id,newName,newRating);
         authorRepository.update(id,updatedAuthor);
     }
 

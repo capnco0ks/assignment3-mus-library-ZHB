@@ -15,11 +15,12 @@ import java.util.List;
 public class AuthorRepository {
     public void create(Author author){
 
-        String sql = "INSERT INTO authors(id, name) VALUES (?, ?)";
+        String sql = "INSERT INTO authors(id, name,rating) VALUES (?, ?, ?)";
         try (Connection conn = DataBaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1,author.getId());
             ps.setString(2, author.getName());
+            ps.setInt(3,author.getRating());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -29,13 +30,17 @@ public class AuthorRepository {
 
     public List<Author> getAll(){
         List<Author> authors = new ArrayList<>();
-        String sql = "SELECT id, name FROM authors";
+        String sql = "SELECT id, name, rating FROM authors";
         try (Connection conn = DataBaseConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()){
 
                 while(rs.next()){
-                    authors.add(new Author(rs.getInt("id"),rs.getString("name")));
+                    authors.add(new Author(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getInt("rating")));
+
                 }
             }
         catch (SQLException e){
@@ -45,7 +50,7 @@ public class AuthorRepository {
     }
 
     public Author getById(int id){
-        String sql = "SELECT id,name FROM authors WHERE id = ?";
+        String sql = "SELECT id,name,rating FROM authors WHERE id = ?";
 
         try(Connection conn = DataBaseConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -55,7 +60,8 @@ public class AuthorRepository {
             if (rs.next()){
                 return new Author(
                         rs.getInt("id"),
-                        rs.getString("name")
+                        rs.getString("name"),
+                        rs.getInt("rating")
                 );
             }
             throw new AuthorNotFoundException(id);
@@ -65,12 +71,13 @@ public class AuthorRepository {
     }
 
     public void update (int id, Author author){
-        String sql = "UPDATE authors SET name = ? WHERE id = ?";
+        String sql = "UPDATE authors SET name = ?,rating = ? WHERE id = ?";
 
         try(Connection conn = DataBaseConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1,author.getName());
-            ps.setInt(2,id);
+            ps.setInt(2,author.getRating());
+            ps.setInt(3,id);
 
             int updated = ps.executeUpdate();
 

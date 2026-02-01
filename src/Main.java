@@ -36,11 +36,14 @@ public class Main {
                     sc.nextLine();
                     System.out.println("Enter name: ");
                     String name = sc.nextLine();
-                    authorService.create(new Author(id,name));
+                    System.out.println("Enter rating (0-10): ");
+                    int rating = sc.nextInt();
+                    sc.nextLine();
+                    authorService.create(new Author(id,name,rating));
                     System.out.println("created succesfully");
                     break;
                 case 2:
-                    authorService.getAll().forEach(author -> System.out.println(author.getId() + " | "+author.getName()));
+                    authorService.getAll().forEach(author -> System.out.println(author.getId() + " | "+author.getName()+" | "+author.getRating()));
                     break;
                 case 3:
                     System.out.println("Enter ID to update: ");
@@ -48,7 +51,10 @@ public class Main {
                     sc.nextLine();
                     System.out.println("Enter name to update: ");
                     String upName = sc.nextLine();
-                    authorService.update(upId,upName);
+                    System.out.println("Enter new rating(0-10): ");
+                    int newRating = sc.nextInt();
+                    sc.nextLine();
+                    authorService.update(upId,upName,newRating);
                     System.out.println("Updated!");
                     break;
                 case 4:
