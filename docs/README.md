@@ -74,25 +74,6 @@ Authors sorted by rating using lambdas
 
 Reflection shows class structure at runtime
 
-Project Structure
-src/
-├── controller/
-├── service/
-│   ├── interfaces/
-├── repository/
-│   ├── interfaces/
-├── model/
-├── exception/
-├── utils/
-│   ├── ReflectionUtils.java
-│   ├── SortingUtils.java
-├── DatabaseConnection.java
-└── Main.java
-resources/
-└── schema.sql
-README.md
-.gitignore
-
 How to Run
 
 Create PostgreSQL database with authors table
