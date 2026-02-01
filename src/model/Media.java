@@ -1,10 +1,13 @@
 package model;
 
-public abstract class Media extends BaseEntity implements model.interfaces.Playable, model.interfaces.Validatable {
+import model.interfaces.Validatable;
+import model.interfaces.Playable;
 
-    protected Category category;
+public abstract class Media extends BaseEntity implements Playable, Validatable {
+
     protected int duration;
     protected Author author;
+    protected Category category;
 
     protected Media(int id, String name, int duration, Author author, Category category) {
         super(id, name);
@@ -16,30 +19,18 @@ public abstract class Media extends BaseEntity implements model.interfaces.Playa
     public abstract void play();
     public abstract String getMediaType();
 
-    public void displayInfo() {
-        System.out.println(
-                "ID: " + getId() +
-                        ", Name: " + getName() +
-                        ", Duration: " + duration +
-                        ", Author: " + (author != null ? author.getName() : "Unknown") +
-                        ", Category: " + (category != null ? category.getName() : "None")
-        );
-    }
-
+    public int getDuration() { return duration; }
     public void setDuration(int duration) {
-        if (duration <= 0) {
-            throw new IllegalArgumentException("Duration must be positive");
-        }
+        if (duration <= 0) throw new IllegalArgumentException("Duration must be positive");
         this.duration = duration;
     }
 
-    public int getDuration() { return duration; }
     public Author getAuthor() { return author; }
     public Category getCategory() { return category; }
 
     @Override
     public boolean isValid() {
-        return getName() != null && !getName().isBlank() && duration > 0 && author != null;
+        return super.isValid() && duration > 0 && author != null;
     }
 
     @Override

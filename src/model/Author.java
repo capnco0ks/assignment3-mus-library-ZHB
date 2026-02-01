@@ -9,14 +9,9 @@ public class Author extends BaseEntity {
         setRating(rating);
     }
 
-    public int getRating() {
-        return rating;
-    }
-
+    public int getRating() { return rating; }
     public void setRating(int rating) {
-        if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
-        }
+        if (rating < 0 || rating > 10) throw new IllegalArgumentException("Rating must be 0-10");
         this.rating = rating;
     }
 
@@ -27,6 +22,6 @@ public class Author extends BaseEntity {
 
     @Override
     public boolean isValid() {
-        return getName() != null && !getName().isBlank();
+        return super.isValid() && rating >= 0 && rating <= 10;
     }
 }
