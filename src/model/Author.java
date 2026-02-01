@@ -1,38 +1,32 @@
 package model;
 
-public class Author {
+public class Author extends BaseEntity {
 
-    private int id;
-    private String name;
     private int rating;
 
-    public Author(int id, String name,int rating){
-        setId(id);
-        setName(name);
+    public Author(int id, String name, int rating) {
+        super(id, name);
         setRating(rating);
     }
 
-    public int getId() {return id; }
-    public String getName(){return name; }
-    public int getRating(){ return rating; }
+    public int getRating() {
+        return rating;
+    }
 
-    public void setId(int id){
-        if (id<= 0){
-           throw new IllegalArgumentException("Author ID cannot be negative!");
-        }
-        this.id = id;
-    }
-    public void setName(String name){
-        if (name==null|| name.isBlank()){
-            throw new IllegalArgumentException("Author name cannot be empty");
-        }
-        this.name = name;
-    }
-    public void setRating(int rating){
-        if (rating < 0 || rating > 10){
-            throw new IllegalArgumentException("rating must be between 0 and 10");
+    public void setRating(int rating) {
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
         this.rating = rating;
     }
 
+    @Override
+    public String getEntityType() {
+        return "Author";
+    }
+
+    @Override
+    public boolean isValid() {
+        return getName() != null && !getName().isBlank();
+    }
 }

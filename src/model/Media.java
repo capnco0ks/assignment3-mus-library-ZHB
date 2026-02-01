@@ -1,71 +1,49 @@
 package model;
-import model.interfaces.Playable;
-import model.interfaces.Validatable;
 
-public abstract class Media implements Playable,Validatable {
+public abstract class Media extends BaseEntity implements model.interfaces.Playable, model.interfaces.Validatable {
 
     protected Category category;
-    protected int id;
-    protected String name;
     protected int duration;
     protected Author author;
 
-    public Media(int id, String name, int duration, Author author, Category category){
-
-        setId(id);
-        setName(name);
+    protected Media(int id, String name, int duration, Author author, Category category) {
+        super(id, name);
         setDuration(duration);
         this.author = author;
         this.category = category;
     }
 
     public abstract void play();
+    public abstract String getMediaType();
 
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(
-                "ID"+id+
-                ", name: "+ name+
-                ", duration: "+duration+
-                ", Author: "+ (author != null ? author.getName() : "Unknown") +
-                ", Category: "+category.getName()
+                "ID: " + getId() +
+                        ", Name: " + getName() +
+                        ", Duration: " + duration +
+                        ", Author: " + (author != null ? author.getName() : "Unknown") +
+                        ", Category: " + (category != null ? category.getName() : "None")
         );
-    }
-//validation
-    public void setName(String name){
-        if (name == null || name.isBlank()){
-            throw new IllegalArgumentException("Media name cannot be empty");
-        }
-        this.name = name;
     }
 
     public void setDuration(int duration) {
-        if (duration <= 0 ){
-            throw new IllegalArgumentException("duration must be positive!");
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration must be positive");
         }
         this.duration = duration;
     }
 
-    public void setId(int id){
-        if (id<=0){
-            throw new IllegalArgumentException("ID must be positive");
-        }
-        this.id = id;
-    }
-    //getters
-    public int getId() { return id; }
-    public String getName() { return name; }
     public int getDuration() { return duration; }
     public Author getAuthor() { return author; }
-
-    public Category getCategory() {return category; }
-
-    public abstract String getMediaType();
+    public Category getCategory() { return category; }
 
     @Override
-    public boolean isValid(){
-        return name != null
-            && !name.isBlank()
-            && duration > 0
-            && author != null;
+    public boolean isValid() {
+        return getName() != null && !getName().isBlank() && duration > 0 && author != null;
+    }
+
+    @Override
+    public String getEntityType() {
+        return getMediaType();
     }
 }

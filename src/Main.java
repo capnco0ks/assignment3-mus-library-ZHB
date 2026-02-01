@@ -1,21 +1,33 @@
 import model.*;
-import repository.AuthorRepository;
 import service.AuthorService;
-import utils.DataBaseConnection;
 
-import model.Author;
-import repository.AuthorRepository;
-
-import java.sql.Connection;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
-        AuthorService authorService= new AuthorService();
+    public static void main(String[] args) {
+
+        Author authorForDemo = new Author(1, "Eminem", 9);
+        Category categoryForDemo = new Category(1, "Hip-Hop");
+
+        BaseEntity entity1 = authorForDemo;
+        BaseEntity entity2 = new Song(
+                2,
+                "Superman",
+                120,
+                authorForDemo,
+                "Rap",
+                categoryForDemo
+        );
+
+        System.out.println("=== Polymorphism Demo ===");
+        entity1.printInfo();
+        entity2.printInfo();
+        System.out.println("=========================");
+
+        AuthorService authorService = new AuthorService();
         Scanner sc = new Scanner(System.in);
 
-        while(true){
+        while (true) {
             System.out.println("---------");
             System.out.println("DB OPERATIONS");
             System.out.println("---------");
@@ -26,78 +38,53 @@ public class Main {
             System.out.println("4 - Delete");
             System.out.println("5 - EXIT");
 
-            int choise = sc.nextInt();
+            int choice = sc.nextInt();
             sc.nextLine();
 
-            switch (choise){
+            switch (choice) {
                 case 1:
                     System.out.println("Enter ID:");
-                    int id = sc.nextByte();
+                    int id = sc.nextInt();
                     sc.nextLine();
                     System.out.println("Enter name: ");
                     String name = sc.nextLine();
                     System.out.println("Enter rating (0-10): ");
                     int rating = sc.nextInt();
                     sc.nextLine();
-                    authorService.create(new Author(id,name,rating));
-                    System.out.println("created succesfully");
+                    authorService.create(new Author(id, name, rating));
+                    System.out.println("Created successfully!");
                     break;
                 case 2:
-                    authorService.getAll().forEach(author -> System.out.println(author.getId() + " | "+author.getName()+" | "+author.getRating()));
+                    authorService.getAll()
+                            .forEach(author -> System.out.println(
+                                    author.getId() + " | " +
+                                            author.getName() + " | " +
+                                            author.getRating()
+                            ));
                     break;
                 case 3:
                     System.out.println("Enter ID to update: ");
-                    int upId = sc.nextByte();
+                    int upId = sc.nextInt();
                     sc.nextLine();
                     System.out.println("Enter name to update: ");
                     String upName = sc.nextLine();
-                    System.out.println("Enter new rating(0-10): ");
+                    System.out.println("Enter new rating (0-10): ");
                     int newRating = sc.nextInt();
                     sc.nextLine();
-                    authorService.update(upId,upName,newRating);
+                    authorService.update(upId, upName, newRating);
                     System.out.println("Updated!");
                     break;
                 case 4:
                     System.out.println("Enter ID you want to delete: ");
-                    int delId = sc.nextByte();
+                    int delId = sc.nextInt();
                     sc.nextLine();
                     authorService.delete(delId);
-                    System.out.println("Deleted succesfully.");
+                    System.out.println("Deleted successfully.");
                     break;
                 case 5:
                     System.out.println("Bye");
                     System.exit(0);
             }
         }
-
-
-
-        // DB OPERTAON ADDIN NEW AUTHOR
-        //Author author1 = new Author(1,"MORGENSHTERN");
-        //repo.create(author1);
-
-         // AuthorRepository authorRepo = new AuthorRepository();
-         // Author author2 = new Author(2,"Lil Wayne");
-         // authorRepo.create(author2);
-         // AuthorRepository repo = new AuthorRepository();
-
-        //GET VALUES
-        // authorService.getAll().forEach(a ->
-        //         System.out.println(a.getId()+" "+a.getName())
-        // );
-
-        //UPDATE
-        // authorService.update(2,"Lil Wayne (updated)");
-
-        //DELETIN
-        // authorService.delete(2);
-
-
-        //POLYMORPH
-        //song.play();
-        //Podcast.play();
-
-        //song.displayInfo();
-        //Podcast.displayInfo();
     }
 }
