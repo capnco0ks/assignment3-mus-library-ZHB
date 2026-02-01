@@ -3,6 +3,9 @@ import repository.AuthorRepository;
 import repository.interfaces.CrudRepository;
 import service.AuthorService;
 
+import utils.ReflectionUtils;
+import utils.SortingUtils;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,6 +16,12 @@ public class Main {
         AuthorService authorService = new AuthorService(authorRepo);
 
         Scanner sc = new Scanner(System.in);
+
+        List<Author> authors = authorService.getAll();
+        SortingUtils.sortList(authors, (a1, a2) -> a2.getRating() - a1.getRating());
+        if (!authors.isEmpty()) {
+            ReflectionUtils.inspectClass(authors.get(0));
+        }
 
         while (true) {
             System.out.println("---------");
@@ -45,7 +54,8 @@ public class Main {
                     System.out.println("Author created successfully.");
                 }
                 case 2 -> {
-                    List<Author> authors = authorService.getAll();
+                    authors = authorService.getAll();
+                    SortingUtils.sortList(authors, (a1, a2) -> a2.getRating() - a1.getRating());
                     System.out.println("=== Authors List (sorted by rating desc) ===");
                     authors.forEach(Author::printInfo);
                     System.out.println("===========================================");
