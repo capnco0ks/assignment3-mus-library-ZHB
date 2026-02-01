@@ -1,57 +1,73 @@
 package service;
 
+import exception.DuplicateResourceException;
+import exception.InvalidInputException;
+import exception.ResourceNotFoundException;
 import model.Author;
+import repository.interfaces.CrudRepository;
 import repository.AuthorRepository;
+import service.interfaces.AuthorServiceInterface;
 
 import java.util.List;
+import java.util.Comparator;
 
-public class AuthorService {
+public class AuthorService implements AuthorServiceInterface {
 
-    private final AuthorRepository authorRepository = new AuthorRepository();
+    private final CrudRepository<Author> authorRepository;
 
-    public void create(Author author){
-        if (author==null){
-            throw new IllegalArgumentException("Author cannot be null");
-        }
-        if (author.getName() == null || author.getName().isBlank()){
-            throw new IllegalArgumentException("Author cannot be empty");
-        }
-        if (author.getRating() < 0 || author.getRating() > 10) {
-            throw new IllegalArgumentException("Invalid rating");
-        }
+    public AuthorService(CrudRepository<Author> repository) {
+        this.authorRepository = repository;
+    }
+
+    @Override
+    public void create(Author author) {
+        if (author == null) throw new InvalidInputException("Author cannot be null");
+        author.validate();
         try {
             authorRepository.getById(author.getId());
-            throw new IllegalArgumentException("author with this ID already exists");
+            throw new DuplicateResourceException("Author with this ID already exists");
+        } catch (ResourceNotFoundException e) {
+            authorRepository.create(author);
         }
-        catch (RuntimeException e){
-
-        }
-        authorRepository.create(author);
     }
 
-    public List<Author> getAll(){
-        return authorRepository.getAll();
+    @Override
+    public List<Author> getAll() {
+        List<Author> authors = authorRepository.getAll();
+        // пример лямбды: сортировка по рейтингу
+        authors.sort(Comparator.comparingInt(Author::getRating).reversed());
+        return authors;
     }
 
-    public Author getById(int id){
-        if (id<0){
-            throw new IllegalArgumentException("id must be positive");
+    @Override
+    public Author getById(int id) {
+        if (id <= 0) throw new InvalidInputException("ID must be positive");
+        try {
+            return authorRepository.getById(id);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Author with id " + id + " not found");
         }
-        return authorRepository.getById(id);
     }
 
-    public void update (int id, String newName,int newRating){
-        if (newName == null || newName.isBlank()){
-            throw new IllegalArgumentException("Author cannot be empty");
+    @Override
+    public void update(int id, String newName, int newRating) {
+        if (newName == null || newName.isBlank()) throw new InvalidInputException("Name cannot be empty");
+        if (newRating < 0 || newRating > 10) throw new InvalidInputException("Rating must be 0-10");
+        Author updated = new Author(id, newName, newRating);
+        try {
+            authorRepository.update(id, updated);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Author with id " + id + " not found");
         }
-        Author updatedAuthor = new Author(id,newName,newRating);
-        authorRepository.update(id,updatedAuthor);
     }
 
-    public void delete (int id){
-        if (id<=0){
-            throw new IllegalArgumentException("author ID must be positive");
+    @Override
+    public void delete(int id) {
+        if (id <= 0) throw new InvalidInputException("ID must be positive");
+        try {
+            authorRepository.delete(id);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Author with id " + id + " not found");
         }
-        authorRepository.delete(id);
     }
 }
