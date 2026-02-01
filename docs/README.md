@@ -1,93 +1,105 @@
-# Music Library API — Assignment 3 
+Music Library API — Assignment 4
+
 Akizhanov Assanali SE-2519
 
 Project Overview
-This project is a console-based Java application that implements a Music Library API.
-The system allows managing media content such as Songs and Podcasts, as well as Authors,
-using Object-Oriented Programming principles, JDBC, and a PostgreSQL database.
 
-The application follows a multi-layer architecture:
-Controller → Service → Repository → Database.
+Console-based Java application implementing a Music Library API.
+The system manages Authors and demonstrates OOP principles, SOLID architecture, Generics, Lambdas, and Reflection.
 
-OOP Design
-The core abstract class is Media.
-It contains common fields such as id, name, duration, and author.
-The class defines an abstract play() method and a concrete displayInfo() method.
+Layered architecture:
+Controller → Service → Repository → Database
 
-Two subclasses extend Media:
-Song and Podcast.
-Polymorphism is demonstrated by calling overridden methods through a Media reference.
+OOP & SOLID Design
 
-Two interfaces are used:
-Playable, which defines the play() method.
-Validatable, which defines the isValid() method.
+BaseEntity: abstract class with id, name, rating
 
-Composition is implemented by including an Author object inside Media.
+Abstract methods: getEntityType(), isValid()
+
+Concrete method: printInfo()
+
+Author extends BaseEntity, fully encapsulated with getters/setters and validation
+
+SOLID principles applied:
+
+SRP: separate classes for Service, Repository, Model
+
+OCP/LSP: BaseEntity extensible for new entity types
+
+DIP: Service depends on generic repository interface
+
+Generics & Lambdas
+
+Generic repository interface (CrudRepository<T>)
+
+Lambda expressions used for sorting authors by rating
+
+Reflection
+
+ReflectionUtils inspects objects at runtime, printing:
+
+Class name
+
+Fields
+
+Methods
 
 Database Design
-The project uses PostgreSQL as a relational database.
-Two main tables are created:
-authors and media.
 
-The media table contains a foreign key that references authors(id).
+PostgreSQL table: authors
+
+Fields: id, name, rating
+
+CRUD implemented via AuthorService → AuthorRepository
 
 Example schema:
+
 CREATE TABLE authors (
 id INT PRIMARY KEY,
-name VARCHAR(100) NOT NULL
+name VARCHAR(100) NOT NULL,
+rating INT NOT NULL
 );
 
-JDBC and CRUD
-JDBC is implemented using DriverManager, Connection, and PreparedStatement.
-Statement is not used.
-
-CRUD operations are implemented for the Author entity:
-create
-getAll
-getById
-update
-delete
-
-Validation and business rules are handled in the Service layer.
-
 Exception Handling
-The project uses a custom exception hierarchy:
-InvalidInputException
-DuplicateResourceException
-ResourceNotFoundException
-DatabaseOperationException
 
-Exceptions are propagated from Repository to Service and then to Main.
+Custom exceptions: InvalidInputException, DuplicateResourceException, ResourceNotFoundException, DatabaseOperationException
 
-Controller and Demonstration
-The Main class demonstrates:
-creating authors
-reading all authors
-updating author data
-deleting authors
-handling errors such as deleting a non-existing author
-polymorphism using Media references
+Exceptions propagate from Repository → Service → Controller
 
-How to Run
-1. Create a PostgreSQL database
-2. Configure database credentials in DataBaseConnection
-3. Compile and run the project using:
-   java Main
+Controller & Demonstration
+
+Create, list, update, delete authors
+
+Authors sorted by rating using lambdas
+
+Reflection shows class structure at runtime
 
 Project Structure
 src/
-controller/
-service/
-repository/
-model/
-exception/
-utils/
-Main.java
+├── controller/
+├── service/
+│   ├── interfaces/
+├── repository/
+│   ├── interfaces/
+├── model/
+├── exception/
+├── utils/
+│   ├── ReflectionUtils.java
+│   ├── SortingUtils.java
+├── DatabaseConnection.java
+└── Main.java
+resources/
+└── schema.sql
+README.md
+.gitignore
 
-Reflection
-During this project I learned how to apply OOP principles,
-how to work with JDBC and relational databases,
-and how to design a clean multi-layer architecture.
+How to Run
 
-Author
-Assignment completed as part of Advanced OOP and JDBC coursework.
+Create PostgreSQL database with authors table
+
+Configure credentials in DatabaseConnection.java
+
+Compile and run:
+
+javac Main.java
+java Main
