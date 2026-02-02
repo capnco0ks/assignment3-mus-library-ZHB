@@ -17,7 +17,6 @@ public class Main {
 
         CrudRepository<Author> authorRepo = new AuthorRepository();
         AuthorService authorService = new AuthorService(authorRepo);
-
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -55,7 +54,7 @@ public class Main {
                 case 2 -> {
                     List<Author> authors = authorService.getAll();
                     SortingUtils.sortList(authors, (a1, a2) -> a2.getRating() - a1.getRating());
-                    System.out.println("=== Authors List (sorted by rating desc) ===");
+                    System.out.println("--- Authors List (sorted by rating desc) ===");
                     authors.forEach(Author::printInfo);
                     System.out.println("===========================================");
                 }

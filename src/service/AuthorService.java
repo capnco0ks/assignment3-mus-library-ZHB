@@ -34,7 +34,6 @@ public class AuthorService implements AuthorServiceInterface {
     @Override
     public List<Author> getAll() {
         List<Author> authors = authorRepository.getAll();
-        // пример лямбды: сортировка по рейтингу
         authors.sort(Comparator.comparingInt(Author::getRating).reversed());
         return authors;
     }
